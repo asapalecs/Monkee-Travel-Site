@@ -1,12 +1,8 @@
 const express = require('express')
-// NOTE: this is based on version 3.x of express-handlebars.
-// express-handlebars is now on version 6.x, so this is rather
-// out-of-date, but reflects what's in the book.  if you want
-// to use a newer version of express-handlebars, import it as so:
-// const { engine: expressHandlebars } = require('express-handlebars')
 const expressHandlebars = require('express-handlebars')
-
 const app = express()
+const port = process.env.PORT || 3000
+const fortune = require('./lib/forune')
 
 // configure Handlebars view engine
 app.engine('handlebars', expressHandlebars.engine({
@@ -16,11 +12,12 @@ app.set('view engine', 'handlebars')
 
 app.use(express.static(__dirname + '/public'))
 
-const port = process.env.PORT || 3000
 
 app.get('/', (req, res) => res.render('home'))
 
-app.get('/about', (req, res) => res.render('about'))
+app.get('/about', (req, res) => {
+  res.render('about', {fortune: randomQuote});  
+})
 
 // custom 404 page
 app.use((req, res) => {
