@@ -2,17 +2,20 @@ const express = require("express");
 const expressHandlebars = require("express-handlebars");
 const app = express();
 const port = process.env.PORT || 3000;
-const fortune = require("./lib/fortune");
 const handlers = require("./lib/handlers");
 
 // configure Handlebars view engine
-app.engine(
-  "handlebars",
-  expressHandlebars.engine({
-    defaultLayout: "main",
-  })
-);
-app.set("view engine", "handlebars");
+app.engine('handlebars', expressHandlebars.engine({
+  defaultLayout: 'main',
+  helpers: {
+    section: function(name, options) {
+      if(!this._sections) this._sections = {}
+      this._sections[name] = options.fn(this)
+      return null
+    },
+  },
+}))
+app.set('view engine', 'handlebars')
 
 app.use(express.static(__dirname + "/public"));
 
