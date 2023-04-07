@@ -1,10 +1,14 @@
 const express = require("express");
 const expressHandlebars = require("express-handlebars");
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const port = process.env.PORT || 3000;
 const handlers = require("./lib/handlers");
 const app = express();
 const multiparty = require('multiparty');
+const credentials = require('./credentials');
+const expressSession = require('express-session');
+const flashMiddleware = require('./lib/middleware/flash');
 
 // configure Handlebars view engine
 app.engine('handlebars', expressHandlebars.engine({
@@ -22,7 +26,19 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
+//Cookies
+app.use(cookieParser(credentials.cookieSecret));
+//Sessions
+app.use(expressSession({
+  resave: false,
+  saveUninitialized: false,
+  secret: credentials.cookieSecret,
+}))
+
 app.use(express.static(__dirname + "/public"));
+
+//adding Flash Middleware
+app.use(flashMiddleware)
 
 app.get("/", handlers.home);
 
