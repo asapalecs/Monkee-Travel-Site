@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 const handlers = require("./lib/handlers");
 const app = express();
 const multiparty = require('multiparty');
-const credentials = require('./credentials');
+const credentials = require('./.credentials');
 const expressSession = require('express-session');
 const flashMiddleware = require('./lib/middleware/flash');
 
