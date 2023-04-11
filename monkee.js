@@ -1,10 +1,10 @@
 const express = require("express");
+const app = express();
 const expressHandlebars = require("express-handlebars");
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const port = process.env.PORT || 3000;
 const handlers = require("./lib/handlers");
-const app = express();
 const multiparty = require('multiparty');
 const credentials = require('./.credentials');
 const expressSession = require('express-session');
@@ -22,6 +22,7 @@ app.engine('handlebars', expressHandlebars.engine({
   },
 }))
 app.set('view engine', 'handlebars');
+app.set('env', 'production');
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
@@ -69,12 +70,12 @@ app.use(handlers.notFound);
 
 // custom 500 page
 app.use(handlers.serverError);
-
+console.log(process.env.NODE_ENV);
 if (require.main === module) {
   app.listen(port, () => {
     console.log(
-      `Express started on http://localhost:${port}` +
-        "; press Ctrl-C to terminate."
+      `Express started on http://localhost:${port} ` +
+      "; press Ctrl-C to terminate."
     );
   });
 } else {
