@@ -10,6 +10,10 @@ module.exports = {
         description:
           "Spend a day sailing on the Columbia and " +
           "enjoying craft beers in Hood River!",
+        location: {
+          //i'll use this for geocoding later
+          search: 'Hood River, USA', 
+        },
         price: 99.95,
         tags: ["day trip", "hood river", "sailing", "windsurfing", "breweries"],
         inSeason: true,
@@ -18,9 +22,13 @@ module.exports = {
         packagesSold: 0,
       },
     ];
+    //If the "available" option is specified, return only vacations that match
      if(options.available !== undefined){
         return vacations.filter(({available}) => available === options.available)
-        return vacations
+        return vacations;
      }
-  },
+     addVacationInSeasonListener: async (email, sku) =>{
+      //later...
+     }
+  }
 };
