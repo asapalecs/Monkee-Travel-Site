@@ -1,34 +1,26 @@
+// initialize database connection
+const mongoose = require("mongoose");
+const env = process.env.NODE_ENV || "development";
+const { connectionString } = credentials.mongo[env];
+if (!connectionString) {
+  console.error("MongoDB connection string missing!");
+  process.exit(1);
+}
+mongoose.connect(connectionString, { useNewUrlParser: true });
+const db = mongoose.connection;
+db.on("error", (err) => {
+  console.error("MongoDB error: " + err.message);
+  process.exit(1);
+});
+db.once("open", () => console.log("MongoDB connection established"));
+
 module.exports = {
-  getVacations: async (options = {}) => {
-    //fake vacations
-    const vacations = [
-      {
-        name: "Hood River Day Trip",
-        slug: "hood-river-day-trip",
-        category: "Day Trip",
-        sku: "HR199",
-        description:
-          "Spend a day sailing on the Columbia and " +
-          "enjoying craft beers in Hood River!",
-        location: {
-          //i'll use this for geocoding later
-          search: 'Hood River, USA', 
-        },
-        price: 99.95,
-        tags: ["day trip", "hood river", "sailing", "windsurfing", "breweries"],
-        inSeason: true,
-        maximumGuests: 16,
-        available: true,
-        packagesSold: 0,
-      },
-    ];
-    //If the "available" option is specified, return only vacations that match
-     if(options.available !== undefined){
-        return vacations.filter(({available}) => available === options.available)
-        return vacations;
-     }
-     addVacationInSeasonListener: async (email, sku) =>{
-      //later...
-     }
-  }
+  getVacations: async (options = {}) => Vacation.find(options),
+  addVacationInSeasonListener: async (email, sku) => {
+    await VacationInSeasonListener.updateOne(
+      { email },
+      { $push: { skus: sku } },
+      { upsert: true }
+    );
+  },
 };
