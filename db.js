@@ -1,33 +1,27 @@
+const credentials = require('./.credentials')
+
 // initialize database connection
-const mongoose = require("mongoose");
-const env = process.env.NODE_ENV || "development";
-const { connectionString } = credentials.mongo[env];
-
-if (!connectionString) {
-  console.error("MongoDB connection string missing!");
-  process.exit(1);
+const mongoose = require('mongoose')
+const env = process.env.NODE_ENV || "development"
+console.log('env:', env)
+const { connectionString } = credentials.mongo[env]
+console.log('credentials.mongo:', credentials.mongo)
+if(!connectionString) {
+  console.error('MongoDB connection string missing!')
+  process.exit(1)
 }
-mongoose.connect(connectionString, { useNewUrlParser: true });
-const db = mongoose.connection;
-db.on("error", (err) => {
-  console.error("MongoDB error: " + err.message);
-  process.exit(1);
-});
-db.once("open", () => console.log("MongoDB connection established"));
-
-module.exports = {
-  getVacations: async (options = {}) => Vacation.find(options),
-  addVacationInSeasonListener: async (email, sku) => {
-    await VacationInSeasonListener.updateOne(
-      { email },
-      { $push: { skus: sku } },
-      { upsert: true }
-    );
-  },
-};
+mongoose.connect(connectionString, { useNewUrlParser: true })
+const db = mongoose.connection
+db.on('error', err => {
+  console.error('MongoDB error: ' + err.message)
+  process.exit(1)
+})
+db.once('open', () => console.log('MongoDB connection established'))
 
 // seed vacation data (if necessary)
 const Vacation = require('./models/vacation.js')
+// ...
+
 Vacation.find((err, vacations) => {
   if(err) return console.error(err)
   if(vacations.length) return
@@ -77,3 +71,16 @@ Vacation.find((err, vacations) => {
       notes: 'The tour guide is currently recovering from a skiing accident.',
   }).save()
 })
+
+const VacationInSeasonListener = require('./models/vacationInSeasonListener')
+
+module.exports = {
+  getVacations: async (options = {}) => Vacation.find(options),
+  addVacationInSeasonListener: async (email, sku) => {
+    await VacationInSeasonListener.updateOne(
+      { email },
+      { $push: { skus: sku } },
+      { upsert: true }
+    )
+  },
+}
