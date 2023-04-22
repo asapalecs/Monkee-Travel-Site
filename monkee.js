@@ -6,9 +6,13 @@ const cookieParser = require('cookie-parser');
 const port = process.env.PORT || 3000;
 const handlers = require("./lib/handlers");
 const multiparty = require('multiparty');
-const credentials = require('./.credentials');
+const credentials = require('./credentials');
 const expressSession = require('express-session');
 const flashMiddleware = require('./lib/middleware/flash');
+
+
+require('./db')
+console.log(credentials)
 
 // configure Handlebars view engine
 app.engine('handlebars', expressHandlebars.engine({
@@ -63,6 +67,9 @@ app.post('/contest/vacation-photo/:year/:month', (req, res) => {
   })
 })
 
+// vacations
+app.get('/vacations', handlers.listVacations)
+
 app.get("/about", handlers.about);
 
 // custom 404 page
@@ -70,7 +77,6 @@ app.use(handlers.notFound);
 
 // custom 500 page
 app.use(handlers.serverError);
-console.log(process.env.NODE_ENV);
 if (require.main === module) {
   app.listen(port, () => {
     console.log(
