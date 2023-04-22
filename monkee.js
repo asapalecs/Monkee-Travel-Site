@@ -68,7 +68,6 @@ app.post('/contest/vacation-photo/:year/:month', (req, res) => {
 // vacations
 app.get('/vacations', handlers.listVacations)
 
-app.get("/about", handlers.about);
 
 // custom 404 page
 app.use(handlers.notFound);
