@@ -4,15 +4,18 @@
     <h3>{{name}}</h3>
     <p>{{description}}</p>
     {{#if inSeason}}
-      <span class="price">{{price}}</span> 
-      <a href="/cart/add?sku={{sku}}" class="btn btn-default">Buy Now!</a>
+      <span class="price">{{price}}</span>
+      <a href="/cart/add?sku={{sku}}" class="btn btn-default">
+        Buy Now
+      </a>
     {{else}}
-      <span class="outOfSeason">We're sorry, this vacation is currently 
-      not in season.
-      {{! The "notify me when this vacation is in season" 
-          page will be our next task. }}
-      <a href="/notify-me-when-in-season?sku={{sku}}">Notify me when 
-      this vacation is in season.</a>
+      <span class="outOfSeason">
+        We're sorry... this vacation is not in season.
+      </span>
+      {{! the "notify me when this vacation is in season" page will be the next task}}
+      <a href="/notify-when-in-season?sku={{sku}}">
+        Notify me when this vacation is in season.
+      </a>
     {{/if}}
   </div>
 {{/each}}

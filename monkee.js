@@ -10,10 +10,6 @@ const credentials = require('./credentials');
 const expressSession = require('express-session');
 const flashMiddleware = require('./lib/middleware/flash');
 
-
-require('./db')
-console.log(credentials)
-
 // configure Handlebars view engine
 app.engine('handlebars', expressHandlebars.engine({
   defaultLayout: 'main',
