@@ -5,4 +5,5 @@ node_modules
 .credentials.*
 bootstrap
 log
+.env
 #(OSX), *.bak, etc.
